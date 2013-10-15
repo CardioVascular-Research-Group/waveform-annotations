@@ -10,8 +10,6 @@ import java.util.regex.Pattern;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import javax.faces.context.FacesContext;
-
 import org.xmldb.api.base.Resource;
 import org.xmldb.api.base.ResourceIterator;
 import org.xmldb.api.base.ResourceSet;
@@ -20,7 +18,6 @@ import org.xmldb.api.base.XMLDBException;
 import edu.jhu.cvrg.dbapi.XMLUtility;
 import edu.jhu.cvrg.waveform.utility.AnnotationQueryBuilder;
 import edu.jhu.cvrg.waveform.model.AnnotationData;
-import edu.jhu.cvrg.waveform.model.StudyEntry;
 
 public class AnnotationUtility extends XMLUtility {
 
@@ -37,15 +34,13 @@ public class AnnotationUtility extends XMLUtility {
 			String driver, String mainDatabase) {
 
 		super(userName, userPassword, uRI, driver, mainDatabase);
-		annotationBuilder = new AnnotationQueryBuilder(this.dbURI,
-				this.dbMainCollection);
+		annotationBuilder = new AnnotationQueryBuilder(this.dbURI, this.dbMainCollection);
 	}
 
 	public AnnotationUtility() {
 		// TODO Auto-generated constructor stub
 		super();
-		annotationBuilder = new AnnotationQueryBuilder(this.dbURI,
-				this.dbMainCollection);
+		annotationBuilder = new AnnotationQueryBuilder(this.dbURI, this.dbMainCollection);
 	}
 
 	/**
@@ -486,7 +481,7 @@ public class AnnotationUtility extends XMLUtility {
 
 			String sQuery = sForCollection + sWhereClause + sOrderByClause
 					+ sReturnClause;
-			System.out.println(sQuery);
+//			System.out.println(sQuery);
 			// The EnumCollection enumeration will tell the execute method which
 			// collection to use
 			ResourceSet resultSet = executeQuery(sQuery);
@@ -721,8 +716,7 @@ public class AnnotationUtility extends XMLUtility {
 
 			String query = sForCollection + sWhereClause + sUpdateClause;
 
-			System.out
-					.println("The query for storing comments to be executed is:  "
+			System.out.println("The query for storing comments to be executed is:  "
 							+ query);
 			executeQuery(query);
 
