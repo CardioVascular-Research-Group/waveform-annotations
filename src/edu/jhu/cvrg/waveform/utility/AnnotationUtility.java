@@ -2,13 +2,12 @@ package edu.jhu.cvrg.waveform.utility;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 import org.xmldb.api.base.Resource;
 import org.xmldb.api.base.ResourceIterator;
@@ -16,7 +15,6 @@ import org.xmldb.api.base.ResourceSet;
 import org.xmldb.api.base.XMLDBException;
 
 import edu.jhu.cvrg.dbapi.XMLUtility;
-import edu.jhu.cvrg.waveform.utility.AnnotationQueryBuilder;
 import edu.jhu.cvrg.waveform.model.AnnotationData;
 
 public class AnnotationUtility extends XMLUtility {
@@ -102,13 +100,11 @@ public class AnnotationUtility extends XMLUtility {
 
 		try {
 			String sForCollection = annotationBuilder.defaultFor();
-			String sWhereClause = annotationBuilder.userRecordSearch(sStudyID,
-					sSubjectID, sRecordName, sUserID);
+			String sWhereClause = annotationBuilder.userRecordSearch(sStudyID,sSubjectID, sRecordName, sUserID);
 
 			sXml = sAnnotationXML;
 
-			String sUpdateClause = annotationBuilder.insertLeadStatement(
-					String.valueOf(iLeadIndex), sXml);
+			String sUpdateClause = annotationBuilder.insertLeadStatement(String.valueOf(iLeadIndex), sXml);
 
 			String sQuery = sForCollection + sWhereClause + sUpdateClause;
 
@@ -554,18 +550,12 @@ public class AnnotationUtility extends XMLUtility {
 	 * @return - XML for the annotation node.
 	 */
 	public String makeXMLAnnotationNode(AnnotationData annData) {
-		String node = "";
-//		String bioportalUrl = "http://bioportal.bioontology.org/ontologies/45835";
-		// String ms = String.valueOf(java.lang.System.currentTimeMillis());
+		StringBuilder node = new StringBuilder();
 
-//		boolean aSinglePoint = annData.getIsSinglePoint();
-
-		// System.out.println("isSinglePoint = " + aSinglePoint);
-
-		node += "<annotation>\n";
-		node += "  <createdBy>" + annData.getCreator() + "</createdBy>";
-		node += "  <bioportalReference>\n";
-		node += "    <term>" + annData.getConceptLabel() + "</term>\n"; // One
+		node.append("<annotation>\n");
+		node.append("  <createdBy>" + annData.getCreator() + "</createdBy>");
+		node.append("  <bioportalReference>\n");
+		node.append("    <term>" + annData.getConceptLabel() + "</term>\n"); // One
 																		// of
 																		// the
 																		// items
@@ -574,45 +564,39 @@ public class AnnotationUtility extends XMLUtility {
 																		// displayed
 																		// for
 																		// now
-		node += "    <bioportalUrl>" + annData.getConceptRestURL()
-				+ "</bioportalUrl>\n";
-		node += "  </bioportalReference>\n";
-		node += "  <ID>" + annData.getUniqueID() + "</ID>\n";
+		node.append("    <bioportalUrl>" + annData.getConceptRestURL()).append("</bioportalUrl>\n");
+		node.append("  </bioportalReference>\n");
+		node.append("  <ID>" + annData.getUniqueID() + "</ID>\n");
 		if (!(annData.getIsComment())) {
 			// ******* Onset data *****************
-			node += "  <onset>\n";
-			node += "    <bioportalReference>\n";
-			node += "      <term>" + annData.getOnsetLabel() + "</term>\n"; // 2nd
+			node.append("  <onset>\n");
+			node.append("    <bioportalReference>\n");
+			node.append("      <term>" + annData.getOnsetLabel() + "</term>\n"); // 2nd
 																			// item
 																			// to
 																			// display
 																			// for
 																			// now
-			node += "      <bioportalUrl>" + annData.getOnsetRestURL()
-					+ "</bioportalUrl>\n";
-			node += "    </bioportalReference>\n";
-			node += "    <position>\n";
-			node += "      <yCoordinate>" + annData.getMicroVoltStart()
-					+ "</yCoordinate>\n"; // third item to display for now
-			node += "      <tCoordinate>" + annData.getMilliSecondStart()
-					+ "</tCoordinate>\n"; // fourth item to display for now
-			node += "    </position>\n";
-			node += "  </onset>\n";
+			node.append("      <bioportalUrl>" + annData.getOnsetRestURL()
+					+ "</bioportalUrl>\n");
+			node.append("    </bioportalReference>\n");
+			node.append("    <position>\n");
+			node.append("      <yCoordinate>").append(annData.getMicroVoltStart()).append("</yCoordinate>\n"); // third item to display for now
+			node.append("      <tCoordinate>").append(annData.getMilliSecondStart()).append("</tCoordinate>\n"); // fourth item to display for now
+			node.append("    </position>\n");
+			node.append("  </onset>\n");
 			// ******* Offset data *****************
 			if (!(annData.getIsSinglePoint())) {
-				node += "  <offset>\n";
-				node += "    <bioportalReference>\n";
-				node += "      <term>" + annData.getOffsetLabel() + "</term>\n";
-				node += "      <bioportalUrl>" + annData.getOffsetRestURL()
-						+ "</bioportalUrl>\n";
-				node += "    </bioportalReference>\n";
-				node += "    <position>\n";
-				node += "      <yCoordinate>" + annData.getMicroVoltEnd()
-						+ "</yCoordinate>\n";
-				node += "      <tCoordinate>" + annData.getMilliSecondEnd()
-						+ "</tCoordinate>\n";
-				node += "    </position>\n";
-				node += "  </offset>\n";
+				node.append("  <offset>\n");
+				node.append("    <bioportalReference>\n");
+				node.append("      <term>").append(annData.getOffsetLabel()).append("</term>\n");
+				node.append("      <bioportalUrl>").append(annData.getOffsetRestURL()).append("</bioportalUrl>\n");
+				node.append("    </bioportalReference>\n");
+				node.append("    <position>\n");
+				node.append("      <yCoordinate>").append(annData.getMicroVoltEnd()).append("</yCoordinate>\n");
+				node.append("      <tCoordinate>").append(annData.getMilliSecondEnd()).append("</tCoordinate>\n");
+				node.append("    </position>\n");
+				node.append("  </offset>\n");
 			}
 			// *******
 		}
@@ -623,14 +607,13 @@ public class AnnotationUtility extends XMLUtility {
 			//  and preceded by the "[comment]" flag in the value node.
 			valueText += DefCommSeparator + annData.getComment();
 		}
-		node += "  <value>" + valueText + "</value>\n"; 
+		node.append("  <value>").append(valueText).append("</value>\n"); 
 		if (!annData.getIsComment()) {
-			node += "  <measurementUnit>" + annData.getUnit()
-					+ "</measurementUnit>";
+			node.append("  <measurementUnit>").append(annData.getUnit()).append("</measurementUnit>");
 		}
-		node += "</annotation>\n";
+		node.append("</annotation>\n");
 
-		return node;
+		return node.toString();
 	}
 
 	/**
@@ -716,8 +699,6 @@ public class AnnotationUtility extends XMLUtility {
 
 			String query = sForCollection + sWhereClause + sUpdateClause;
 
-			System.out.println("The query for storing comments to be executed is:  "
-							+ query);
 			executeQuery(query);
 
 			success = true;
