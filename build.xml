@@ -19,11 +19,15 @@
 		</copy>
 	</target>
 
-	
-	<target name="clean">
-		<delete dir="build" />
+	<target name="all">
+		<antcall target="clean" />
+		<antcall target="jar" />
 	</target>
-
+			
+    <target name="clean">
+        <delete dir="build"/>
+    </target>
+    
 	<target name="compile" depends="clean">
 		<mkdir dir="build" />
 		<mkdir dir="build/classes" />
