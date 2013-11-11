@@ -4,9 +4,25 @@
 		
 	<property file="${liferay}/liferay-plugins-sdk-6.1.1/build.${user.name}.properties" />
 	<property name="dependencies" value="${liferay}/projects-dependencies" />
+	
 		
 	<path id="project-classpath">
 		<fileset dir="${dependencies}/${ant.project.name}-dependencies">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
+	
+	<path id="hudson-classpath">
+		<fileset dir="/opt/liferay/utility-jars">
+			<include name="*.jar"/>
+		</fileset>
+		<fileset dir="/opt/liferay/portlet-ext">
+			<include name="*.jar"/>
+		</fileset>
+		<fileset dir="/opt/liferay/waveform3/tomcat-7.0.27/lib">
+			<include name="*.jar"/>
+		</fileset>
+		<fileset dir="/opt/liferay/waveform3/tomcat-7.0.27/lib/ext">
 			<include name="*.jar"/>
 		</fileset>
 	</path>
@@ -40,21 +56,34 @@
 		
 		<mkdir dir="build" />
 		<mkdir dir="build/classes" />
+		
 		<javac includeantruntime="false" srcdir="src" destdir="build/classes" source="1.7" target="1.7">
-			<classpath refid="project-classpath" />
+			<classpath refid="${path}" />
 			<compilerarg value="-Xlint:unchecked" />
 		</javac>
 	</target>
 
-	<target name="jar" depends="compile">
-		<jar destfile="/opt/liferay/portlet-ext/waveform-annotations.jar"
-			basedir="build/classes">
-		</jar>
+	<target name="jar" >
+		<antcall target="compile">
+			<param name="path" value="project-classpath"/>
+		</antcall>
 		
-    	<mkdir dir="${dependencies}/cvrg-broker-service-dependencies"/>
+		<jar destfile="/opt/liferay/portlet-ext/waveform-annotations.jar" basedir="build/classes" />
+		
+		<mkdir dir="${dependencies}/cvrg-broker-service-dependencies"/>
     	<copy todir="${dependencies}/cvrg-broker-service-dependencies" file="/opt/liferay/portlet-ext/waveform-annotations.jar" />
 		
 		<antcall target="clean" />
 	</target>
+	
+	<target name="jar-hudson">
+		<antcall target="compile">
+			<param name="path" value="hudson-classpath"/>
+		</antcall>
+		
+		<jar destfile="/opt/liferay/portlet-ext/waveform-annotations.jar" basedir="build/classes" />
+		
+		<antcall target="clean" />
+	</target>	
 
 </project>
